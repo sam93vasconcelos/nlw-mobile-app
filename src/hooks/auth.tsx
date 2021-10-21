@@ -58,7 +58,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         await AsyncStorage.setItem(USER_STORAGE, JSON.stringify(user));
-        await AsyncStorage.setItem(TOKEN_STORAGE, JSON.stringify(user));
+        await AsyncStorage.setItem(TOKEN_STORAGE, token);
 
         setUser(user);
       }
@@ -68,7 +68,11 @@ function AuthProvider({ children }: AuthProviderProps) {
       setIsSigningIn(false);
     }
   }
-  async function signOut() {}
+  async function signOut() {
+    setUser(null);
+    await AsyncStorage.removeItem(USER_STORAGE);
+    await AsyncStorage.removeItem(TOKEN_STORAGE);
+  }
 
   useEffect(() => {
     async function loadUserStorageData() {
